@@ -94,23 +94,4 @@ public class Sms extends CordovaPlugin {
 		}
 		this.cordova.getActivity().startActivity(sendIntent);
 	}
-
-		// randomize the intent filter action to avoid using the same receiver
-		String intentFilterAction = INTENT_FILTER_SMS_SENT + java.util.UUID.randomUUID().toString();
-		this.cordova.getActivity().registerReceiver(broadcastReceiver, new IntentFilter(intentFilterAction));
-
-		PendingIntent sentIntent = PendingIntent.getBroadcast(this.cordova.getActivity(), 0, new Intent(intentFilterAction), 0);
-
-		// depending on the number of parts we send a text message or multi parts
-		if (parts.size() > 1) {
-			ArrayList<PendingIntent> sentIntents = new ArrayList<PendingIntent>();
-			for (int i = 0; i < parts.size(); i++) {
-				sentIntents.add(sentIntent);
-			}
-			manager.sendMultipartTextMessage(phoneNumber, null, parts, sentIntents, null);
-		}
-		else {
-			manager.sendTextMessage(phoneNumber, null, message, sentIntent, null);
-		}
-	}
 }
